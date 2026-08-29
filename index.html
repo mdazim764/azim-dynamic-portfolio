@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Azim Khairdi | Software Engineer</title>
+    <meta name="description" content="Portfolio of Azim Khairdi - Software Engineer, M.Tech CSE at IIT Patna.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f5f2ea;
+            --bg-soft: #ebe5d8;
+            --paper: #fffdf8;
+            --ink: #102029;
+            --muted: #55616a;
+            --line: rgba(16, 32, 41, 0.14);
+            --brand: #0f8f78;
+            --brand-dark: #0b6f5d;
+            --accent: #ff8a30;
+            --card-shadow: 0 18px 45px rgba(20, 35, 45, 0.12);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: "Manrope", "Segoe UI", sans-serif;
+            color: var(--ink);
+            background:
+                radial-gradient(circle at 0% 0%, rgba(15, 143, 120, 0.16), transparent 35%),
+                radial-gradient(circle at 100% 0%, rgba(255, 138, 48, 0.16), transparent 30%),
+                linear-gradient(180deg, var(--bg) 0%, #f7f4ed 45%, var(--bg-soft) 100%);
+            line-height: 1.65;
+        }
+
+        .page {
+            width: min(1120px, calc(100% - 32px));
+            margin: 0 auto;
+            padding-bottom: 34px;
+        }
+
+        .shell {
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            background: rgba(255, 253, 248, 0.78);
+            backdrop-filter: blur(10px);
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+        }
+
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 30;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--line);
+            background: rgba(255, 253, 248, 0.93);
+            backdrop-filter: blur(12px);
+        }
+
+        .logo {
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 1.2rem;
+            letter-spacing: 0.03em;
+            font-weight: 700;
+            color: var(--brand-dark);
+            white-space: nowrap;
+        }
+
+        .menu-toggle {
+            display: none;
+            border: 1px solid var(--line);
+            background: var(--paper);
+            color: var(--ink);
+            border-radius: 10px;
+            padding: 8px 12px;
+            font-size: 0.88rem;
+            font-weight: 700;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--muted);
+            font-size: 0.9rem;
+            padding: 8px 11px;
+            border-radius: 999px;
+            border: 1px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--brand-dark);
+            border-color: rgba(15, 143, 120, 0.2);
+            background: rgba(15, 143, 120, 0.08);
+        }
+
+        main {
+            padding: 26px 24px 22px;
+        }
+
+        .hero {
+            display: grid;
+            grid-template-columns: 1.45fr 0.95fr;
+            gap: 18px;
+            align-items: stretch;
+        }
+
+        .hero-left,
+        .hero-right,
+        .panel,
+        .timeline-card,
+        .project,
+        .achievement,
+        .edu-row,
+        .contact-wrap,
+        .skill-card {
+            border: 1px solid var(--line);
+            border-radius: 22px;
+            background: var(--paper);
+        }
+
+        .hero-left {
+            padding: 30px;
+            background: linear-gradient(155deg, rgba(15, 143, 120, 0.08), rgba(255, 138, 48, 0.1));
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(15, 143, 120, 0.1);
+            color: var(--brand-dark);
+            border: 1px solid rgba(15, 143, 120, 0.24);
+            font-size: 0.86rem;
+            font-weight: 700;
+            padding: 8px 12px;
+            border-radius: 999px;
+            letter-spacing: 0.01em;
+        }
+
+        .hero h1 {
+            margin-top: 12px;
+            font-family: "Space Grotesk", sans-serif;
+            font-size: clamp(2.2rem, 5vw, 4.15rem);
+            line-height: 0.98;
+            letter-spacing: -0.03em;
+        }
+
+        .hero h2 {
+            margin-top: 10px;
+            font-size: clamp(1.05rem, 2.6vw, 1.35rem);
+            color: var(--brand-dark);
+            font-weight: 700;
+        }
+
+        .hero .lead {
+            margin-top: 16px;
+            color: var(--muted);
+            max-width: 60ch;
+        }
+
+        .hero-cta {
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .btn {
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 44px;
+            padding: 0 16px;
+            border-radius: 12px;
+            font-weight: 700;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        }
+
+        .btn.primary {
+            background: linear-gradient(135deg, var(--brand), #12b093);
+            color: #ffffff;
+            box-shadow: 0 12px 26px rgba(15, 143, 120, 0.3);
+        }
+
+        .btn.primary:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn.secondary {
+            color: var(--ink);
+            background: #ffffff;
+            border: 1px solid var(--line);
+        }
+
+        .btn.secondary:hover {
+            transform: translateY(-2px);
+            background: rgba(15, 143, 120, 0.06);
+        }
+
+        .hero-right {
+            padding: 22px;
+            display: grid;
+            gap: 12px;
+            align-content: start;
+            background: linear-gradient(180deg, #fffefb, #fffaf1);
+        }
+
+        .quick-title {
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 1.15rem;
+        }
+
+        .quick-item {
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .quick-item strong {
+            display: block;
+            font-size: 0.84rem;
+            letter-spacing: 0.05em;
+            color: var(--muted);
+            text-transform: uppercase;
+        }
+
+        .quick-item span {
+            display: block;
+            margin-top: 4px;
+            font-size: 0.96rem;
+            color: var(--ink);
+        }
+
+        section {
+            margin-top: 18px;
+        }
+
+        .section-head {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .section-head h3 {
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 1.38rem;
+            white-space: nowrap;
+        }
+
+        .section-head::after {
+            content: "";
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, rgba(15, 143, 120, 0.35), transparent);
+        }
+
+        .panel {
+            padding: 20px;
+        }
+
+        .panel p {
+            color: var(--muted);
+            margin-top: 6px;
+        }
+
+        .edu-list {
+            display: grid;
+            gap: 10px;
+        }
+
+        .edu-row {
+            padding: 14px;
+            display: grid;
+            grid-template-columns: 1.1fr 1.2fr auto;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .edu-row strong {
+            font-size: 0.96rem;
+        }
+
+        .edu-row span {
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        .timeline {
+            display: grid;
+            gap: 12px;
+        }
+
+        .timeline-card {
+            padding: 18px;
+        }
+
+        .timeline-card h4 {
+            font-size: 1.04rem;
+            color: var(--ink);
+        }
+
+        .timeline-meta {
+            margin: 3px 0 10px;
+            color: var(--brand-dark);
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .timeline-card ul {
+            margin-left: 20px;
+            color: var(--muted);
+        }
+
+        .timeline-card li + li {
+            margin-top: 6px;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .skill-card {
+            padding: 16px;
+        }
+
+        .skill-card h4 {
+            font-size: 1rem;
+        }
+
+        .chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .chip {
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-size: 0.83rem;
+            border: 1px solid rgba(15, 143, 120, 0.24);
+            color: var(--brand-dark);
+            background: rgba(15, 143, 120, 0.08);
+        }
+
+        .projects {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .project {
+            padding: 17px;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .project:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 30px rgba(14, 28, 33, 0.13);
+        }
+
+        .project .tag {
+            font-size: 0.78rem;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: var(--accent);
+            font-weight: 800;
+        }
+
+        .project h4 {
+            margin-top: 6px;
+            font-size: 1.02rem;
+        }
+
+        .project p {
+            margin-top: 8px;
+            color: var(--muted);
+            font-size: 0.92rem;
+        }
+
+        .achievements {
+            display: grid;
+            gap: 10px;
+        }
+
+        .achievement {
+            padding: 14px;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), #ffb26a);
+            box-shadow: 0 0 0 5px rgba(255, 138, 48, 0.18);
+        }
+
+        .achievement p {
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        .year {
+            color: var(--brand-dark);
+            font-weight: 800;
+            font-size: 0.9rem;
+        }
+
+        .contact-wrap {
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 12px;
+            background: linear-gradient(145deg, rgba(15, 143, 120, 0.08), rgba(255, 138, 48, 0.1));
+        }
+
+        .contact-wrap p {
+            color: var(--muted);
+            margin-top: 8px;
+        }
+
+        .contact-links {
+            display: grid;
+            gap: 8px;
+            align-content: start;
+        }
+
+        .contact-links a {
+            text-decoration: none;
+            border: 1px solid var(--line);
+            border-radius: 11px;
+            padding: 10px 12px;
+            color: var(--ink);
+            background: rgba(255, 255, 255, 0.82);
+            transition: all 0.2s ease;
+            font-size: 0.92rem;
+        }
+
+        .contact-links a:hover {
+            border-color: rgba(15, 143, 120, 0.38);
+            color: var(--brand-dark);
+            background: rgba(15, 143, 120, 0.08);
+        }
+
+        footer {
+            margin-top: 16px;
+            padding: 0 24px 24px;
+            color: var(--muted);
+            text-align: center;
+            font-size: 0.88rem;
+        }
+
+        .secret-portal {
+            color: inherit;
+            text-decoration: none;
+            cursor: text;
+        }
+
+        .secret-portal:hover {
+            color: var(--brand-dark);
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(12px);
+            animation: fadeUp 0.65s ease forwards;
+        }
+
+        .delay-1 { animation-delay: 0.08s; }
+        .delay-2 { animation-delay: 0.16s; }
+        .delay-3 { animation-delay: 0.24s; }
+
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 980px) {
+            .hero,
+            .projects,
+            .skills-grid,
+            .contact-wrap {
+                grid-template-columns: 1fr;
+            }
+
+            .edu-row {
+                grid-template-columns: 1fr;
+                gap: 6px;
+            }
+
+            .hero-left,
+            .hero-right,
+            .panel,
+            .contact-wrap,
+            .project,
+            .timeline-card,
+            .skill-card {
+                border-radius: 18px;
+            }
+        }
+
+        @media (max-width: 760px) {
+            nav {
+                padding: 14px;
+            }
+
+            .menu-toggle {
+                display: inline-flex;
+            }
+
+            .nav-links {
+                position: absolute;
+                left: 14px;
+                right: 14px;
+                top: 64px;
+                display: none;
+                flex-direction: column;
+                gap: 5px;
+                border: 1px solid var(--line);
+                border-radius: 14px;
+                background: rgba(255, 253, 248, 0.98);
+                padding: 10px;
+                box-shadow: var(--card-shadow);
+            }
+
+            .nav-links.open {
+                display: flex;
+            }
+
+            .nav-links a {
+                border: 1px solid var(--line);
+                border-radius: 10px;
+                text-align: center;
+                background: #fff;
+            }
+
+            main {
+                padding: 16px 14px 16px;
+            }
+
+            .hero-left,
+            .hero-right {
+                padding: 18px;
+            }
+
+            .hero h1 {
+                font-size: clamp(1.9rem, 12vw, 3rem);
+            }
+
+            .achievement {
+                grid-template-columns: auto 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <div class="shell">
+            <nav>
+                <div class="logo">AK / PORTFOLIO</div>
+                <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu" aria-expanded="false">Menu</button>
+                <div class="nav-links" id="navLinks">
+                    <a href="#about">About</a>
+                    <a href="#education">Education</a>
+                    <a href="#experience">Experience</a>
+                    <a href="#projects">Projects</a>
+                    <a href="#skills">Skills</a>
+                    <a href="#achievements">Achievements</a>
+                    <a href="#contact">Contact</a>
+                </div>
+            </nav>
+
+            <main>
+                <section class="hero reveal" id="hero">
+                    <div class="hero-left">
+                        <span class="eyebrow">M.Tech CSE @ IIT Patna | Roll No. 2611CS05</span>
+                        <h1>Azim Khairdi</h1>
+                        <h2>Software Engineer building robust products with strong CS foundations.</h2>
+                        <p class="lead">
+                            I work across backend systems, full-stack applications, and mobile development.
+                            My focus is clean architecture, practical scalability, and meaningful user impact.
+                        </p>
+                        <div class="hero-cta">
+                            <a href="#projects" class="btn primary">View Work</a>
+                            <a href="#contact" class="btn secondary">Get In Touch</a>
+                        </div>
+                    </div>
+
+                    <aside class="hero-right reveal delay-1">
+                        <h3 class="quick-title">Quick Snapshot</h3>
+                        <div class="quick-item">
+                            <strong>Current Program</strong>
+                            <span>M.Tech in CSE, IIT Patna</span>
+                        </div>
+                        <div class="quick-item">
+                            <strong>Specialization</strong>
+                            <span>Backend, Full-Stack, React Native, REST API Integration</span>
+                        </div>
+                        <div class="quick-item">
+                            <strong>Contact</strong>
+                            <span>+91 8600836379 | khairdimdazim@gmail.com</span>
+                        </div>
+                        <div class="quick-item">
+                            <strong>Profiles</strong>
+                            <span>GitHub: mdazim764 | LinkedIn: azim-khairdi-680972209</span>
+                        </div>
+                    </aside>
+                </section>
+
+                <section id="about" class="reveal delay-1">
+                    <div class="section-head"><h3>About Me</h3></div>
+                    <article class="panel">
+                        <p>
+                            My software journey began with deep curiosity for problem solving and systems thinking.
+                            From Urdu-medium schooling to M.Tech at IIT Patna, I have continuously grown through
+                            disciplined learning and project-first execution.
+                        </p>
+                        <p>
+                            I enjoy translating ideas into working products, whether it is a React Native app for farmers,
+                            a data-driven web platform, or a backend service with clean API architecture.
+                        </p>
+                    </article>
+                </section>
+
+                <section id="education" class="reveal delay-2">
+                    <div class="section-head"><h3>Education</h3></div>
+                    <div class="edu-list">
+                        <article class="edu-row">
+                            <strong>M.Tech (Computer Science and Engineering)</strong>
+                            <span>Indian Institute of Technology, Patna</span>
+                            <span>2026 - Present (Pursuing)</span>
+                        </article>
+                        <article class="edu-row">
+                            <strong>B.Tech (Computer Science and Engineering)</strong>
+                            <span>N. K. Orchid College of Engineering and Technology, Solapur</span>
+                            <span>2022 - 2025 | CGPA: 7.35</span>
+                        </article>
+                        <article class="edu-row">
+                            <strong>Diploma in Computer Technology</strong>
+                            <span>Government Polytechnic, Solapur</span>
+                            <span>2022 | 83.14%</span>
+                        </article>
+                        <article class="edu-row">
+                            <strong>Secondary (SSC)</strong>
+                            <span>Maharashtra State Board</span>
+                            <span>2019 | 72.0%</span>
+                        </article>
+                    </div>
+                </section>
+
+                <section id="experience" class="reveal delay-2">
+                    <div class="section-head"><h3>Experience</h3></div>
+                    <div class="timeline">
+                        <article class="timeline-card">
+                            <h4>Sciqus Infotech Pvt. Ltd. - Trainee Software Engineer</h4>
+                            <p class="timeline-meta">Remote / India | Feb 2025 - Aug 2025</p>
+                            <ul>
+                                <li>Developed and deployed cross-platform mobile applications using React Native for agriculture and client-support domains.</li>
+                                <li>Engineered Kheti Sathi with AI logic and real-time weather API integration for crop scheduling and personalized suggestions.</li>
+                                <li>Integrated government REST APIs for mandi rates and implemented WebRTC for real-time client support communication.</li>
+                            </ul>
+                        </article>
+
+                        <article class="timeline-card">
+                            <h4>Oceonic IT Solution Pvt. Ltd. - Web Development Intern</h4>
+                            <p class="timeline-meta">Solapur, India | Feb 2023 - Aug 2023</p>
+                            <ul>
+                                <li>Customized and enhanced the A2R Store Framework for home appliance ecommerce platforms.</li>
+                                <li>Integrated REST APIs for inventory, product updates, and customer interactions using PHP and MySQL.</li>
+                            </ul>
+                        </article>
+                    </div>
+                </section>
+
+                <!-- <section id="projects" class="reveal delay-3">
+                    <div class="section-head"><h3>Projects</h3></div>
+                    <div class="projects">
+                        <article class="project">
+                            <span class="tag">2025</span>
+                            <h4>Kheti Sathi (Agri-Tech Mobile App)</h4>
+                            <p>
+                                Built an AI-driven agricultural app for crop scheduling, weather-aware suggestions,
+                                and farmer-centric decision support.
+                            </p>
+                            <div class="chips">
+                                <span class="chip">React Native</span>
+                                <span class="chip">Node.js</span>
+                                <span class="chip">OpenWeather API</span>
+                                <span class="chip">AI</span>
+                            </div>
+                        </article>
+
+                        <article class="project">
+                            <span class="tag">2024</span>
+                            <h4>E-Marketing Application (E-Mart4U)</h4>
+                            <p>
+                                Developed a full-stack enterprise app to automate business operations with
+                                management dashboards and analytical workflows.
+                            </p>
+                            <div class="chips">
+                                <span class="chip">C#</span>
+                                <span class="chip">ASP.NET MVC</span>
+                                <span class="chip">Entity Framework</span>
+                                <span class="chip">MySQL</span>
+                            </div>
+                        </article>
+
+                        <article class="project">
+                            <span class="tag">2023</span>
+                            <h4>Employee Management System</h4>
+                            <p>
+                                Designed a desktop application for secure employee record management with
+                                complete CRUD operations backed by SQL.
+                            </p>
+                            <div class="chips">
+                                <span class="chip">Java</span>
+                                <span class="chip">Java Swing</span>
+                                <span class="chip">SQL</span>
+                            </div>
+                        </article>
+                    </div>
+                </section> -->
+
+                <section id="projects" class="reveal delay-3">
+                    <div class="section-head"><h3>Projects</h3></div>
+                    <!-- We added the ID 'dynamic-projects' so JavaScript can find it easily -->
+                    <div class="projects" id="dynamic-projects">
+                        <p style="color: var(--muted);">Loading latest projects from database...</p>
+                    </div>
+                </section>
+
+                <section id="skills" class="reveal delay-3">
+                    <div class="section-head"><h3>Technical Skills</h3></div>
+                    <div class="skills-grid">
+                        <article class="skill-card">
+                            <h4>Programming</h4>
+                            <div class="chips">
+                                <span class="chip">C</span><span class="chip">C++</span><span class="chip">Python</span>
+                                <span class="chip">Java</span><span class="chip">C#</span><span class="chip">JavaScript</span><span class="chip">SQL</span>
+                            </div>
+                        </article>
+                        <article class="skill-card">
+                            <h4>Frameworks and Mobile</h4>
+                            <div class="chips">
+                                <span class="chip">React Native</span><span class="chip">ASP.NET MVC</span><span class="chip">Node.js</span><span class="chip">Entity Framework</span>
+                            </div>
+                        </article>
+                        <article class="skill-card">
+                            <h4>Web Technologies</h4>
+                            <div class="chips">
+                                <span class="chip">HTML/CSS</span><span class="chip">REST APIs</span><span class="chip">WebRTC</span>
+                            </div>
+                        </article>
+                        <article class="skill-card">
+                            <h4>Tools and OS</h4>
+                            <div class="chips">
+                                <span class="chip">Git</span><span class="chip">GitHub</span><span class="chip">Android Studio</span>
+                                <span class="chip">Visual Studio</span><span class="chip">Linux</span><span class="chip">Windows</span>
+                            </div>
+                        </article>
+                    </div>
+                </section>
+
+                <section id="courses" class="reveal delay-3">
+                    <div class="section-head"><h3>Key Courses</h3></div>
+                    <article class="panel">
+                        <div class="chips">
+                            <span class="chip">Data Structures and Algorithms</span>
+                            <span class="chip">DBMS</span>
+                            <span class="chip">Operating Systems</span>
+                            <span class="chip">Machine Learning</span>
+                            <span class="chip">Artificial Intelligence</span>
+                            <span class="chip">Object-Oriented Programming</span>
+                        </div>
+                    </article>
+                </section>
+
+                <section id="achievements" class="reveal delay-3">
+                    <div class="section-head"><h3>Achievements and Honors</h3></div>
+                    <div class="achievements">
+                        <article class="achievement">
+                            <span class="dot" aria-hidden="true"></span>
+                            <div>
+                                <strong>1st Position - Smart India Hackathon (SIH), MHRD</strong>
+                                <p>Won INR 1 Lakh cash prize.</p>
+                            </div>
+                            <span class="year">2019</span>
+                        </article>
+                        <article class="achievement">
+                            <span class="dot" aria-hidden="true"></span>
+                            <div>
+                                <strong>Winner - Web Designing Competition (URECKON'18)</strong>
+                                <p>Organized by IEM and ISRO.</p>
+                            </div>
+                            <span class="year">2018</span>
+                        </article>
+                        <article class="achievement">
+                            <span class="dot" aria-hidden="true"></span>
+                            <div>
+                                <strong>GitHub Arctic Code Vault Contributor</strong>
+                                <p>Contributed to repositories in the GitHub Archive Program.</p>
+                            </div>
+                            <span class="year">2020</span>
+                        </article>
+                    </div>
+                </section>
+
+                <section id="contact" class="reveal delay-3">
+                    <div class="section-head"><h3>Contact</h3></div>
+                    <div class="contact-wrap">
+                        <div>
+                            <h4>Let us create something useful together.</h4>
+                            <p>
+                                I am currently focused on M.Tech coursework and advanced algorithms, but I am always open
+                                to discussing software projects, internships, and full-time opportunities.
+                            </p>
+                            <div class="hero-cta">
+                                <a href="mailto:azim_2611cs05@iitp.ac.in" class="btn primary">Say Hello</a>
+                                <a href="mailto:khairdimdazim@gmail.com" class="btn secondary">Personal Email</a>
+                            </div>
+                        </div>
+                        <div class="contact-links">
+                            <a href="mailto:azim_2611cs05@iitp.ac.in">azim_2611cs05@iitp.ac.in</a>
+                            <a href="mailto:khairdimdazim@gmail.com">khairdimdazim@gmail.com</a>
+                            <a href="tel:+918600836379">+91 8600836379</a>
+                            <a href="https://github.com/mdazim764" target="_blank" rel="noreferrer">github.com/mdazim764</a>
+                            <a href="https://www.linkedin.com/in/azim-khairdi-680972209" target="_blank" rel="noreferrer">linkedin.com/in/azim-khairdi-680972209</a>
+                        </div>
+                    </div>
+                </section>
+            </main>
+
+            <footer>
+                <p>
+                    Designed and built by Azim Khairdi<br>
+                    &copy; 2026 All rights reserved<a href="http://10.15.7.7:8000" target="_blank" class="secret-portal">.</a>
+                </p>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        const menuToggle = document.getElementById("menuToggle");
+        const navLinks = document.getElementById("navLinks");
+
+        menuToggle.addEventListener("click", () => {
+            const isOpen = navLinks.classList.toggle("open");
+            menuToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+        });
+
+        navLinks.querySelectorAll("a").forEach((link) => {
+            link.addEventListener("click", () => {
+                navLinks.classList.remove("open");
+                menuToggle.setAttribute("aria-expanded", "false");
+            });
+        });
+
+        // ==========================================
+        // DYNAMIC PORTFOLIO SCRIPT
+        // ==========================================
+        async function fetchLiveProjects() {
+            const projectContainer = document.getElementById('dynamic-projects');
+            
+            try {
+                // 1. Ask the backend for data
+                const response = await fetch('http://localhost:5000/api/projects');
+                const projects = await response.json();
+                
+                // 2. Clear the "Loading..." text
+                projectContainer.innerHTML = ''; 
+
+                // 3. Loop through database data and create the HTML cards exactly like your original design!
+                projects.forEach(proj => {
+                    // Turn the array of technologies into HTML spans
+                    const chipsHtml = proj.technologies.map(t => `<span class="chip">${t}</span>`).join('');
+                    
+                    // Create the article
+                    const articleHtml = `
+                        <article class="project">
+                            <span class="tag">${proj.year}</span>
+                            <h4>${proj.title}</h4>
+                            <p>${proj.description}</p>
+                            <div class="chips">
+                                ${chipsHtml}
+                            </div>
+                        </article>
+                    `;
+                    
+                    // Add it to the webpage
+                    projectContainer.innerHTML += articleHtml;
+                });
+            } catch (error) {
+                console.error("Error connecting to backend:", error);
+                projectContainer.innerHTML = '<p style="color: red;">Failed to load projects from server.</p>';
+            }
+        }
+
+        // Run the function as soon as the portfolio opens!
+        fetchLiveProjects();
+    </script>
+</body>
+</html>

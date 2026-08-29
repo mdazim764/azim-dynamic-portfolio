@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Azim's Secure Admin Dashboard</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f5f2ea; color: #102029; padding: 30px; }
+        h1 { color: #0b6f5d; display: flex; justify-content: space-between; align-items: center; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); margin-bottom: 25px; }
+        
+        label { font-weight: bold; margin-top: 10px; display: block; font-size: 0.9rem; color: #55616a; }
+        input, textarea { width: 100%; padding: 10px; margin-top: 5px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; }
+        button { background: #0f8f78; color: white; padding: 12px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; transition: 0.2s; }
+        button:hover { background: #0b6f5d; }
+        .btn-danger { background: #ff4d4d; width: auto; padding: 5px 15px; }
+        
+        .project-item { border-left: 4px solid #ff8a30; padding-left: 15px; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #eee; position: relative; }
+        .tech-badge { background: #ebe5d8; padding: 4px 8px; border-radius: 20px; font-size: 0.8rem; margin-right: 5px; color: #0b6f5d;}
+
+        /* Hide the dashboard initially */
+        #dashboardSection { display: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <!-- LOGIN SCREEN -->
+        <div id="loginSection" class="card" style="max-width: 400px; margin: 50px auto; text-align: center;">
+            <h2>Admin Login 🔒</h2>
+            <form id="loginForm">
+                <input type="password" id="adminPassword" placeholder="Enter Password" required>
+                <button type="submit">Unlock Dashboard</button>
+            </form>
+        </div>
+
+        <!-- MAIN DASHBOARD -->
+        <div id="dashboardSection">
+            <h1>Admin Dashboard <button onclick="logout()" class="btn-danger">Logout 🚪</button></h1>
+
+            <!-- ADD PROJECT -->
+            <div class="card">
+                <h2>➕ Add New Project</h2>
+                <form id="addProjectForm">
+                    <label>Project Title</label>
+                    <input type="text" id="title" placeholder="e.g., E-Mart4U" required>
+                    <label>Year</label>
+                    <input type="text" id="year" placeholder="e.g., 2024" required>
+                    <label>Description</label>
+                    <textarea id="description" rows="3" required></textarea>
+                    <label>Technologies (Comma separated)</label>
+                    <input type="text" id="tech" placeholder="React, Node.js, API" required>
+                    <button type="submit">Save Project to Database</button>
+                </form>
+            </div>
+
+            <!-- PROJECTS LIST -->
+            <div class="card">
+                <h2>📁 My Existing Projects</h2>
+                <div id="projectsList">Loading projects...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:5000/api';
+
+        // Check if user is already logged in when the page loads
+        if(localStorage.getItem('adminToken')) {
+            showDashboard();
+        }
+
+        // =====================================
+        // 1. LOGIN LOGIC
+        // =====================================
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const password = document.getElementById('adminPassword').value;
+
+            try {
+                const response = await fetch(`${API_URL}/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Save the "VIP Wristband" (Token) in the browser
+                    localStorage.setItem('adminToken', data.token);
+                    alert("✅ Login Successful!");
+                    showDashboard();
+                } else {
+                    alert("❌ " + data.message);
+                }
+            } catch (error) {
+                console.error("Login error", error);
+            }
+        });
+
+
+        // =====================================
+        // 2. DASHBOARD DISPLAY & DATA FETCHING
+        // =====================================
+        function showDashboard() {
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('dashboardSection').style.display = 'block';
+            fetchProjects(); // Load data once unlocked
+        }
+
+        function logout() {
+            localStorage.removeItem('adminToken'); // Tear off the wristband
+            location.reload(); // Reload page to show login screen again
+        }
+
+        async function fetchProjects() {
+            try {
+                const response = await fetch(`${API_URL}/projects`); // Public, no token needed to READ
+                const projects = await response.json();
+                
+                const listDiv = document.getElementById('projectsList');
+                listDiv.innerHTML = ''; 
+
+                projects.forEach(proj => {
+                    const techSpans = proj.technologies.map(t => `<span class="tech-badge">${t}</span>`).join('');
+                    listDiv.innerHTML += `
+                        <div class="project-item">
+                            <button onclick="deleteProject('${proj._id}')" style="position: absolute; right: 0; top: 0;" class="btn-danger">
+                                Delete 🗑️
+                            </button>
+                            <h3>${proj.title} <small>(${proj.year})</small></h3>
+                            <p>${proj.description}</p>
+                            <div>${techSpans}</div>
+                        </div>
+                    `;
+                });
+            } catch (error) { console.error("Error", error); }
+        }
+
+
+        // =====================================
+        // 3. CREATE DATA (Attach Wristband)
+        // =====================================
+        document.getElementById('addProjectForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const token = localStorage.getItem('adminToken'); // Grab wristband
+
+            const projectData = {
+                title: document.getElementById('title').value,
+                year: document.getElementById('year').value,
+                description: document.getElementById('description').value,
+                technologies: document.getElementById('tech').value.split(',').map(t => t.trim())
+            };
+
+            try {
+                const response = await fetch(`${API_URL}/projects`, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}` // SHOW THE BOUNCER
+                    },
+                    body: JSON.stringify(projectData)
+                });
+
+                if(response.ok) {
+                    alert('✅ Saved!');
+                    e.target.reset();
+                    fetchProjects();
+                } else {
+                    alert('Session expired! Please log in again.');
+                    logout();
+                }
+            } catch (error) { console.error(error); }
+        });
+
+
+        // =====================================
+        // 4. DELETE DATA (Attach Wristband)
+        // =====================================
+        async function deleteProject(id) {
+            if (!confirm("Delete this project?")) return;
+            const token = localStorage.getItem('adminToken'); // Grab wristband
+
+            try {
+                const response = await fetch(`${API_URL}/projects/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` } // SHOW THE BOUNCER
+                });
+                
+                if(response.ok) {
+                    fetchProjects(); 
+                } else {
+                    alert('Session expired! Please log in again.');
+                    logout();
+                }
+            } catch (error) { console.error("Error deleting:", error); }
+        }
+    </script>
+</body>
+</html>
