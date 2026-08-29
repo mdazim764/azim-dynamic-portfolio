@@ -3,6 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
+const nodemailer = require("nodemailer");
 require("dotenv").config();
 
 // 2. INITIALIZING APP & MIDDLEWARE
@@ -77,6 +78,34 @@ app.post("/api/login", (req, res) => {
     res.json({ token, message: "Login successful!" });
   } else {
     res.status(401).json({ message: "Wrong password!" });
+  }
+});
+
+// --- PUBLIC ROUTE: CONTACT FORM EMAILS ---
+app.post("/api/contact", async (req, res) => {
+  const { email, message } = req.body;
+
+  if (!email || !message)
+    return res.status(400).json({ message: "Email and message required." });
+
+  try {
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS },
+    });
+
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: process.env.EMAIL_USER, // Sends the email TO yourself!
+      subject: `Portfolio Contact from: ${email}`,
+      text: `You have a new message from your portfolio visitor (${email}):\n\n${message}`,
+    };
+
+    await transporter.sendMail(mailOptions);
+    res.json({ message: "Email sent successfully!" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error sending email." });
   }
 });
 
