@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const profileSchema = new mongoose.Schema({
   // Hero Section
   name: { type: String, required: true }, // "Azim Khairdi"
+  imageUrl: { type: String }, // <--- WE ADDED THIS LINE!
   eyebrow: { type: String, required: true }, // "M.Tech CSE @ IIT Patna..."
   heroSubtitle: { type: String, required: true }, // "Software Engineer building..."
   heroLead: { type: String, required: true }, // "I work across backend..."

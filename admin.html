@@ -3,201 +3,436 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Azim's Secure Admin Dashboard</title>
+    <title>Azim's Pro Admin Dashboard</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f5f2ea; color: #102029; padding: 30px; }
-        h1 { color: #0b6f5d; display: flex; justify-content: space-between; align-items: center; }
-        .container { max-width: 800px; margin: 0 auto; }
-        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); margin-bottom: 25px; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #f0f2f5; color: #102029; }
+        #dashboardSection { display: none; display: flex; min-height: 100vh; }
+        .sidebar { width: 250px; background: #102029; color: white; padding: 20px 0; }
+        .sidebar h2 { padding: 0 20px; color: #0f8f78; font-size: 1.2rem; }
+        .sidebar button { width: 100%; background: transparent; border: none; color: #bbb; padding: 15px 20px; text-align: left; cursor: pointer; font-size: 1rem; border-left: 4px solid transparent; transition: 0.3s;}
+        .sidebar button:hover, .sidebar button.active { background: #1a303d; color: white; border-left: 4px solid #0f8f78; }
         
-        label { font-weight: bold; margin-top: 10px; display: block; font-size: 0.9rem; color: #55616a; }
-        input, textarea { width: 100%; padding: 10px; margin-top: 5px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; }
-        button { background: #0f8f78; color: white; padding: 12px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; transition: 0.2s; }
-        button:hover { background: #0b6f5d; }
-        .btn-danger { background: #ff4d4d; width: auto; padding: 5px 15px; }
+        .main-content { flex: 1; padding: 40px; overflow-y: auto; height: 100vh; box-sizing: border-box; }
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 25px; }
         
-        .project-item { border-left: 4px solid #ff8a30; padding-left: 15px; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #eee; position: relative; }
-        .tech-badge { background: #ebe5d8; padding: 4px 8px; border-radius: 20px; font-size: 0.8rem; margin-right: 5px; color: #0b6f5d;}
+        label { font-weight: bold; margin-top: 10px; display: block; font-size: 0.85rem; color: #55616a; }
+        input, textarea { width: 100%; padding: 10px; margin-top: 5px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; font-family: inherit;}
+        
+        .btn-primary { background: #0f8f78; color: white; padding: 10px 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; }
+        .btn-primary:hover { background: #0b6f5d; }
+        .btn-danger { background: #ff4d4d; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; }
+        .btn-warning { background: #ff8a30; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; }
+        
+        .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .list-item { padding: 15px; border: 1px solid #eee; border-radius: 8px; margin-bottom: 15px; position: relative; }
+        .list-actions { position: absolute; right: 15px; top: 15px; display: flex; gap: 8px; }
+        .tech-badge { background: #ebe5d8; padding: 4px 8px; border-radius: 20px; font-size: 0.8rem; margin-right: 5px; color: #0b6f5d; display: inline-block; margin-top: 5px;}
 
-        /* Hide the dashboard initially */
-        #dashboardSection { display: none; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
     </style>
 </head>
 <body>
-    <div class="container">
+
+    <!-- LOGIN SCREEN -->
+    <div id="loginSection" style="max-width: 400px; margin: 100px auto; text-align: center;" class="card">
+        <h2>Admin Login 🔒</h2>
+        <form id="loginForm">
+            <input type="password" id="adminPassword" placeholder="Enter Password" required>
+            <button type="submit" class="btn-primary">Unlock Dashboard</button>
+        </form>
+    </div>
+
+    <!-- MAIN DASHBOARD -->
+    <div id="dashboardSection" style="display: none;">
         
-        <!-- LOGIN SCREEN -->
-        <div id="loginSection" class="card" style="max-width: 400px; margin: 50px auto; text-align: center;">
-            <h2>Admin Login 🔒</h2>
-            <form id="loginForm">
-                <input type="password" id="adminPassword" placeholder="Enter Password" required>
-                <button type="submit">Unlock Dashboard</button>
-            </form>
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+            <h2>AZIM PORTFOLIO</h2><br>
+            <button onclick="switchTab('profile')" id="tab-profile">👤 Profile / Hero</button>
+            <button onclick="switchTab('projects')" id="tab-projects" class="active">🚀 Projects</button>
+            <button onclick="switchTab('experience')" id="tab-experience">💼 Experience</button>
+            <button onclick="switchTab('education')" id="tab-education">🎓 Education</button>
+            <button onclick="switchTab('skills')" id="tab-skills">🛠️ Skills</button>
+            <button onclick="switchTab('achievements')" id="tab-achievements">🏆 Achievements</button>
+            <button onclick="switchTab('courses')" id="tab-courses">📚 Courses</button>
         </div>
 
-        <!-- MAIN DASHBOARD -->
-        <div id="dashboardSection">
-            <h1>Admin Dashboard <button onclick="logout()" class="btn-danger">Logout 🚪</button></h1>
-
-            <!-- ADD PROJECT -->
-            <div class="card">
-                <h2>➕ Add New Project</h2>
-                <form id="addProjectForm">
-                    <label>Project Title</label>
-                    <input type="text" id="title" placeholder="e.g., E-Mart4U" required>
-                    <label>Year</label>
-                    <input type="text" id="year" placeholder="e.g., 2024" required>
-                    <label>Description</label>
-                    <textarea id="description" rows="3" required></textarea>
-                    <label>Technologies (Comma separated)</label>
-                    <input type="text" id="tech" placeholder="React, Node.js, API" required>
-                    <button type="submit">Save Project to Database</button>
-                </form>
+        <div class="main-content">
+            <div class="header-top">
+                <h1 id="dashboardTitle" style="margin: 0; color: #102029;">Manage Dashboard</h1>
+                <button onclick="logout()" class="btn-danger" style="width: auto;">Logout 🚪</button>
             </div>
 
-            <!-- PROJECTS LIST -->
-            <div class="card">
-                <h2>📁 My Existing Projects</h2>
-                <div id="projectsList">Loading projects...</div>
+            <!-- PROFILE TAB -->
+            <div id="content-profile" class="tab-content">
+                <div class="card">
+                    <h2>👤 Update My Profile</h2>
+                    <form id="profileForm">
+                        <input type="hidden" id="profId">
+                        <div style="display: flex; gap: 15px;">
+                            <div style="flex: 1;"><label>Full Name</label> <input type="text" id="profName" required></div>
+                            <div style="flex: 1;"><label>Eyebrow Text (e.g. M.Tech CSE...)</label> <input type="text" id="profEyebrow" required></div>
+                            <div style="flex: 1;"><label>Upload Profile Photo</label>
+<input type="file" id="profImageFile" accept="image/*">
+<input type="hidden" id="profImageBase64"> <!-- This secretly holds the photo data -->
+<img id="imagePreview" src="" style="max-width: 120px; border-radius: 12px; margin-top: 10px; display: none; box-shadow: 0 4px 10px rgba(0,0,0,0.1);"></div>
+                        </div>
+                        <label>Hero Subtitle</label> <input type="text" id="profSubtitle" required>
+                        <label>Hero Paragraph (Lead)</label> <textarea id="profLead" rows="2"></textarea>
+                        <label>About Me</label> <textarea id="profAbout" rows="3"></textarea>
+                        <div style="display: flex; gap: 15px;">
+                            <div style="flex: 1;"><label>Current Program</label> <input type="text" id="profProgram"></div>
+                            <div style="flex: 1;"><label>Specialization</label> <input type="text" id="profSpec"></div>
+                        </div>
+                        <h3>Contact Info</h3>
+                        <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                            <input style="flex: 1; min-width: 150px;" type="text" id="profPhone" placeholder="Phone">
+                            <input style="flex: 1; min-width: 150px;" type="text" id="profEmail" placeholder="Academic Email">
+                            <input style="flex: 1; min-width: 150px;" type="text" id="profPersonal" placeholder="Personal Email">
+                            <input style="flex: 1; min-width: 150px;" type="text" id="profGithub" placeholder="GitHub URL">
+                            <input style="flex: 1; min-width: 150px;" type="text" id="profLinkedin" placeholder="LinkedIn URL">
+                        </div>
+                        <label>Contact Intro Paragraph</label> <textarea id="profContactIntro" rows="2"></textarea>
+                        <button type="submit" class="btn-primary">Update Entire Profile</button>
+                    </form>
+                </div>
             </div>
+
+            <!-- PROJECTS TAB -->
+            <div id="content-projects" class="tab-content active">
+                <div class="card">
+                    <h2 id="projFormTitle">➕ Add Project</h2>
+                    <form id="projectForm">
+                        <input type="hidden" id="projId">
+                        <label>Title</label> <input type="text" id="projTitle" required>
+                        <label>Year</label> <input type="text" id="projYear" required>
+                        <label>Description</label> <textarea id="projDesc" rows="3" required></textarea>
+                        <label>Technologies (Comma separated)</label> <input type="text" id="projTech" required>
+                        <div style="display: flex; gap: 10px;">
+                            <button type="submit" class="btn-primary" id="projBtn">Save</button>
+                            <button type="button" onclick="cancelEdit('projectForm', 'projId', 'projFormTitle', '➕ Add Project', 'projBtn', 'Save', 'projCancel')" class="btn-danger" id="projCancel" style="display: none; width: 100%;">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card"><h2>📁 Projects List</h2><div id="projectsList">Loading...</div></div>
+            </div>
+
+            <!-- EXPERIENCE TAB -->
+            <div id="content-experience" class="tab-content">
+                <div class="card">
+                    <h2 id="expFormTitle">➕ Add Experience</h2>
+                    <form id="expForm">
+                        <input type="hidden" id="expId">
+                        <label>Company</label> <input type="text" id="expComp" required>
+                        <label>Role</label> <input type="text" id="expRole" required>
+                        <label>Duration / Location</label> <input type="text" id="expDur" required placeholder="Remote | Feb 2025 - Aug 2025">
+                        <label>Tasks / Achievements (1 per line)</label> <textarea id="expBullets" rows="4" required placeholder="Developed UI... &#10;Engineered APIs..."></textarea>
+                        <div style="display: flex; gap: 10px;">
+                            <button type="submit" class="btn-primary" id="expBtn">Save</button>
+                            <button type="button" onclick="cancelEdit('expForm', 'expId', 'expFormTitle', '➕ Add Experience', 'expBtn', 'Save', 'expCancel')" class="btn-danger" id="expCancel" style="display: none; width: 100%;">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card"><h2>💼 Experience History</h2><div id="experienceList">Loading...</div></div>
+            </div>
+
+            <!-- EDUCATION TAB -->
+            <div id="content-education" class="tab-content">
+                <div class="card">
+                    <h2 id="eduFormTitle">➕ Add Education</h2>
+                    <form id="educationForm">
+                        <input type="hidden" id="eduId">
+                        <label>Degree (e.g., B.Tech)</label> <input type="text" id="eduDegree" required>
+                        <label>Institute Name</label> <input type="text" id="eduInstitute" required>
+                        <label>Duration</label> <input type="text" id="eduDuration" required>
+                        <label>Grade/CGPA</label> <input type="text" id="eduGrade">
+                        <div style="display: flex; gap: 10px;">
+                            <button type="submit" class="btn-primary" id="eduBtn">Save</button>
+                            <button type="button" onclick="cancelEdit('educationForm', 'eduId', 'eduFormTitle', '➕ Add Education', 'eduBtn', 'Save', 'eduCancel')" class="btn-danger" id="eduCancel" style="display: none; width: 100%;">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card"><h2>🏫 Education List</h2><div id="educationList">Loading...</div></div>
+            </div>
+
+            <!-- SKILLS TAB -->
+            <div id="content-skills" class="tab-content">
+                <div class="card">
+                    <h2 id="skillFormTitle">➕ Add Skill Category</h2>
+                    <form id="skillForm">
+                        <input type="hidden" id="skillId">
+                        <label>Category (e.g., Programming)</label> <input type="text" id="skillCat" required>
+                        <label>Skills (Comma separated)</label> <input type="text" id="skillItems" required placeholder="C, C++, Java, SQL">
+                        <div style="display: flex; gap: 10px;">
+                            <button type="submit" class="btn-primary" id="skillBtn">Save</button>
+                            <button type="button" onclick="cancelEdit('skillForm', 'skillId', 'skillFormTitle', '➕ Add Skill', 'skillBtn', 'Save', 'skillCancel')" class="btn-danger" id="skillCancel" style="display: none; width: 100%;">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card"><h2>🛠️ Skills List</h2><div id="skillsList">Loading...</div></div>
+            </div>
+
+            <!-- ACHIEVEMENTS TAB -->
+            <div id="content-achievements" class="tab-content">
+                <div class="card">
+                    <h2 id="achFormTitle">➕ Add Achievement</h2>
+                    <form id="achForm">
+                        <input type="hidden" id="achId">
+                        <label>Title</label> <input type="text" id="achTitle" required>
+                        <label>Description</label> <input type="text" id="achDesc" required>
+                        <label>Year</label> <input type="text" id="achYear" required>
+                        <div style="display: flex; gap: 10px;">
+                            <button type="submit" class="btn-primary" id="achBtn">Save</button>
+                            <button type="button" onclick="cancelEdit('achForm', 'achId', 'achFormTitle', '➕ Add Achievement', 'achBtn', 'Save', 'achCancel')" class="btn-danger" id="achCancel" style="display: none; width: 100%;">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card"><h2>🏆 Achievements List</h2><div id="achievementsList">Loading...</div></div>
+            </div>
+
+            <!-- COURSES TAB -->
+            <div id="content-courses" class="tab-content">
+                <div class="card">
+                    <h2 id="courseFormTitle">➕ Add Course</h2>
+                    <form id="courseForm">
+                        <input type="hidden" id="courseId">
+                        <label>Course Name</label> <input type="text" id="courseName" required>
+                        <div style="display: flex; gap: 10px;">
+                            <button type="submit" class="btn-primary" id="courseBtn">Save</button>
+                            <button type="button" onclick="cancelEdit('courseForm', 'courseId', 'courseFormTitle', '➕ Add Course', 'courseBtn', 'Save', 'courseCancel')" class="btn-danger" id="courseCancel" style="display: none; width: 100%;">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card"><h2>📚 Courses List</h2><div id="coursesList">Loading...</div></div>
+            </div>
+
         </div>
     </div>
 
+    <!-- JAVASCRIPT LOGIC -->
     <script>
-        const API_URL = 'http://localhost:5000/api';
+        const API = 'http://localhost:5000/api';
 
-        // Check if user is already logged in when the page loads
-        if(localStorage.getItem('adminToken')) {
-            showDashboard();
-        }
+        // 1. INIT & AUTHENTICATION
+        if(localStorage.getItem('adminToken')) { showDashboard(); }
 
-        // =====================================
-        // 1. LOGIN LOGIC
-        // =====================================
-        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const password = document.getElementById('adminPassword').value;
-
-            try {
-                const response = await fetch(`${API_URL}/login`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ password })
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    // Save the "VIP Wristband" (Token) in the browser
-                    localStorage.setItem('adminToken', data.token);
-                    alert("✅ Login Successful!");
-                    showDashboard();
-                } else {
-                    alert("❌ " + data.message);
-                }
-            } catch (error) {
-                console.error("Login error", error);
-            }
+            const res = await fetch(`${API}/login`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password }) });
+            const data = await res.json();
+            if(res.ok) { localStorage.setItem('adminToken', data.token); showDashboard(); } else { alert(data.message); }
         });
 
-
-        // =====================================
-        // 2. DASHBOARD DISPLAY & DATA FETCHING
-        // =====================================
         function showDashboard() {
             document.getElementById('loginSection').style.display = 'none';
-            document.getElementById('dashboardSection').style.display = 'block';
-            fetchProjects(); // Load data once unlocked
+            document.getElementById('dashboardSection').style.display = 'flex';
+            switchTab('profile'); // Open Profile first
+        }
+        function logout() { localStorage.removeItem('adminToken'); location.reload(); }
+
+        async function apiCall(endpoint, method = 'GET', body = null) {
+            const options = { method, headers: {} };
+            if(localStorage.getItem('adminToken')) options.headers['Authorization'] = `Bearer ${localStorage.getItem('adminToken')}`;
+            if(body) { options.headers['Content-Type'] = 'application/json'; options.body = JSON.stringify(body); }
+            const res = await fetch(`${API}/${endpoint}`, options);
+            if(res.status === 401 || res.status === 403) { logout(); throw new Error("Unauthorized"); }
+            return res.json();
         }
 
-        function logout() {
-            localStorage.removeItem('adminToken'); // Tear off the wristband
-            location.reload(); // Reload page to show login screen again
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content, .sidebar button').forEach(el => el.classList.remove('active'));
+            document.getElementById(`content-${tabName}`).classList.add('active');
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+            document.getElementById('dashboardTitle').innerText = "Manage " + tabName.charAt(0).toUpperCase() + tabName.slice(1);
+            
+            // Dynamic data loading map
+            const loaderMap = { profile: loadProfile, projects: loadProjects, experience: loadExperience, education: loadEducation, skills: loadSkills, achievements: loadAchievements, courses: loadCourses };
+            if(loaderMap[tabName]) loaderMap[tabName]();
         }
 
-        async function fetchProjects() {
-            try {
-                const response = await fetch(`${API_URL}/projects`); // Public, no token needed to READ
-                const projects = await response.json();
-                
-                const listDiv = document.getElementById('projectsList');
-                listDiv.innerHTML = ''; 
+        function cancelEdit(formId, idField, titleId, titleText, btnId, btnText, cancelBtnId) {
+            document.getElementById(formId).reset();
+            document.getElementById(idField).value = '';
+            document.getElementById(titleId).innerText = titleText;
+            document.getElementById(btnId).innerText = btnText;
+            document.getElementById(cancelBtnId).style.display = 'none';
+        }
 
-                projects.forEach(proj => {
-                    const techSpans = proj.technologies.map(t => `<span class="tech-badge">${t}</span>`).join('');
-                    listDiv.innerHTML += `
-                        <div class="project-item">
-                            <button onclick="deleteProject('${proj._id}')" style="position: absolute; right: 0; top: 0;" class="btn-danger">
-                                Delete 🗑️
-                            </button>
-                            <h3>${proj.title} <small>(${proj.year})</small></h3>
-                            <p>${proj.description}</p>
-                            <div>${techSpans}</div>
-                        </div>
-                    `;
+        async function deleteItem(collection, id) {
+            if(!confirm("Delete this?")) return;
+            await apiCall(`${collection}/${id}`, 'DELETE');
+            switchTab(collection); // Refresh the current tab automatically
+        }
+
+        // ================= PROFILE =================
+        async function loadProfile() {
+            const data = await apiCall('profile');
+            if(data.length > 0) {
+                const p = data[0]; 
+                document.getElementById('profId').value = p._id;
+                ['Name','Eyebrow','Subtitle','Lead','About','Program','Spec','Phone','Email','Personal','Github','Linkedin','ContactIntro'].forEach(f => {
+                    const mappedNames = { 'Name':'name','Eyebrow':'eyebrow','Subtitle':'heroSubtitle','Lead':'heroLead','About':'aboutText','Program':'currentProgram','Spec':'specialization','Phone':'phone','Email':'emailAcademic','Personal':'emailPersonal','Github':'github','Linkedin':'linkedin','ContactIntro':'contactIntro' };
+                    document.getElementById('prof'+f).value = p[mappedNames[f]] || '';
                 });
-            } catch (error) { console.error("Error", error); }
+            }
+            document.getElementById('profImageBase64').value = p.imageUrl || '';
+if(p.imageUrl) {
+    document.getElementById('imagePreview').src = p.imageUrl;
+    document.getElementById('imagePreview').style.display = 'block';
+}
         }
 
+        // === IMAGE UPLOADER LOGIC ===
+document.getElementById('profImageFile').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            // Convert image to Base64 and save it to the hidden input
+            const base64String = event.target.result;
+            document.getElementById('profImageBase64').value = base64String;
+            
+            // Show preview
+            const preview = document.getElementById('imagePreview');
+            preview.src = base64String;
+            preview.style.display = 'block';
+        };
+        reader.readAsDataURL(file); // Trigger the conversion
+    }
+});
 
-        // =====================================
-        // 3. CREATE DATA (Attach Wristband)
-        // =====================================
-        document.getElementById('addProjectForm').addEventListener('submit', async function(e) {
+        document.getElementById('profileForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const token = localStorage.getItem('adminToken'); // Grab wristband
-
-            const projectData = {
-                title: document.getElementById('title').value,
-                year: document.getElementById('year').value,
-                description: document.getElementById('description').value,
-                technologies: document.getElementById('tech').value.split(',').map(t => t.trim())
+            const id = document.getElementById('profId').value;
+            const data = {
+                name: document.getElementById('profName').value, eyebrow: document.getElementById('profEyebrow').value,
+                imageUrl: document.getElementById('profImageBase64').value, // Add this inside the data = { ... }
+                heroSubtitle: document.getElementById('profSubtitle').value, heroLead: document.getElementById('profLead').value,
+                aboutText: document.getElementById('profAbout').value, currentProgram: document.getElementById('profProgram').value,
+                specialization: document.getElementById('profSpec').value, phone: document.getElementById('profPhone').value,
+                emailAcademic: document.getElementById('profEmail').value, emailPersonal: document.getElementById('profPersonal').value,
+                github: document.getElementById('profGithub').value, linkedin: document.getElementById('profLinkedin').value, contactIntro: document.getElementById('profContactIntro').value
             };
-
-            try {
-                const response = await fetch(`${API_URL}/projects`, {
-                    method: 'POST',
-                    headers: { 
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}` // SHOW THE BOUNCER
-                    },
-                    body: JSON.stringify(projectData)
-                });
-
-                if(response.ok) {
-                    alert('✅ Saved!');
-                    e.target.reset();
-                    fetchProjects();
-                } else {
-                    alert('Session expired! Please log in again.');
-                    logout();
-                }
-            } catch (error) { console.error(error); }
+            id ? await apiCall(`profile/${id}`, 'PUT', data) : await apiCall('profile', 'POST', data);
+            alert("✅ Profile Updated!"); loadProfile();
         });
 
+        // ================= PROJECTS =================
+        let stateData = {}; // Stores arrays for editing
+        async function loadProjects() {
+            stateData.projects = await apiCall('projects');
+            const div = document.getElementById('projectsList'); div.innerHTML = '';
+            stateData.projects.forEach(p => {
+                div.innerHTML += `<div class="list-item"><div class="list-actions"><button onclick="editProject('${p._id}')" class="btn-warning">Edit</button><button onclick="deleteItem('projects', '${p._id}')" class="btn-danger">Del</button></div><h3 style="margin:0">${p.title} (${p.year})</h3><p>${p.description}</p><div>${p.technologies.map(t=>`<span class="tech-badge">${t}</span>`).join('')}</div></div>`;
+            });
+        }
+        document.getElementById('projectForm').addEventListener('submit', async (e) => {
+            e.preventDefault(); const id = document.getElementById('projId').value;
+            const data = { title: document.getElementById('projTitle').value, year: document.getElementById('projYear').value, description: document.getElementById('projDesc').value, technologies: document.getElementById('projTech').value.split(',').map(t=>t.trim()) };
+            id ? await apiCall(`projects/${id}`, 'PUT', data) : await apiCall('projects', 'POST', data);
+            cancelEdit('projectForm','projId','projFormTitle','➕ Add Project','projBtn','Save','projCancel'); loadProjects();
+        });
+        function editProject(id) {
+            const p = stateData.projects.find(x => x._id === id);
+            document.getElementById('projId').value = p._id; document.getElementById('projTitle').value = p.title; document.getElementById('projYear').value = p.year; document.getElementById('projDesc').value = p.description; document.getElementById('projTech').value = p.technologies.join(', ');
+            document.getElementById('projFormTitle').innerText = "✏️ Edit Project"; document.getElementById('projBtn').innerText = "Update"; document.getElementById('projCancel').style.display = 'block';
+        }
 
-        // =====================================
-        // 4. DELETE DATA (Attach Wristband)
-        // =====================================
-        async function deleteProject(id) {
-            if (!confirm("Delete this project?")) return;
-            const token = localStorage.getItem('adminToken'); // Grab wristband
+        // ================= EXPERIENCE =================
+        async function loadExperience() {
+            stateData.experience = await apiCall('experience');
+            const div = document.getElementById('experienceList'); div.innerHTML = '';
+            stateData.experience.forEach(e => {
+                div.innerHTML += `<div class="list-item"><div class="list-actions"><button onclick="editExperience('${e._id}')" class="btn-warning">Edit</button><button onclick="deleteItem('experience', '${e._id}')" class="btn-danger">Del</button></div><h3 style="margin:0">${e.role} @ ${e.company}</h3><small style="color:gray">${e.durationMeta}</small><ul style="margin-top:5px; padding-left: 20px;">${e.bullets.map(b=>`<li>${b}</li>`).join('')}</ul></div>`;
+            });
+        }
+        document.getElementById('expForm').addEventListener('submit', async (e) => {
+            e.preventDefault(); const id = document.getElementById('expId').value;
+            const data = { company: document.getElementById('expComp').value, role: document.getElementById('expRole').value, durationMeta: document.getElementById('expDur').value, bullets: document.getElementById('expBullets').value.split('\n').filter(b=>b.trim()) };
+            id ? await apiCall(`experience/${id}`, 'PUT', data) : await apiCall('experience', 'POST', data);
+            cancelEdit('expForm','expId','expFormTitle','➕ Add Experience','expBtn','Save','expCancel'); loadExperience();
+        });
+        function editExperience(id) {
+            const e = stateData.experience.find(x => x._id === id);
+            document.getElementById('expId').value = e._id; document.getElementById('expComp').value = e.company; document.getElementById('expRole').value = e.role; document.getElementById('expDur').value = e.durationMeta; document.getElementById('expBullets').value = e.bullets.join('\n');
+            document.getElementById('expFormTitle').innerText = "✏️ Edit Experience"; document.getElementById('expBtn').innerText = "Update"; document.getElementById('expCancel').style.display = 'block';
+        }
 
-            try {
-                const response = await fetch(`${API_URL}/projects/${id}`, {
-                    method: 'DELETE',
-                    headers: { 'Authorization': `Bearer ${token}` } // SHOW THE BOUNCER
-                });
-                
-                if(response.ok) {
-                    fetchProjects(); 
-                } else {
-                    alert('Session expired! Please log in again.');
-                    logout();
-                }
-            } catch (error) { console.error("Error deleting:", error); }
-        } 
-        
+        // ================= EDUCATION =================
+        async function loadEducation() {
+            stateData.education = await apiCall('education');
+            const div = document.getElementById('educationList'); div.innerHTML = '';
+            stateData.education.forEach(e => {
+                div.innerHTML += `<div class="list-item"><div class="list-actions"><button onclick="editEducation('${e._id}')" class="btn-warning">Edit</button><button onclick="deleteItem('education', '${e._id}')" class="btn-danger">Del</button></div><h3 style="margin:0">${e.degree} <small>${e.duration}</small></h3><p style="margin:0">${e.institute}</p><small>${e.grade||''}</small></div>`;
+            });
+        }
+        document.getElementById('educationForm').addEventListener('submit', async (e) => {
+            e.preventDefault(); const id = document.getElementById('eduId').value;
+            const data = { degree: document.getElementById('eduDegree').value, institute: document.getElementById('eduInstitute').value, duration: document.getElementById('eduDuration').value, grade: document.getElementById('eduGrade').value };
+            id ? await apiCall(`education/${id}`, 'PUT', data) : await apiCall('education', 'POST', data);
+            cancelEdit('educationForm','eduId','eduFormTitle','➕ Add Education','eduBtn','Save','eduCancel'); loadEducation();
+        });
+        function editEducation(id) {
+            const e = stateData.education.find(x => x._id === id);
+            document.getElementById('eduId').value = e._id; document.getElementById('eduDegree').value = e.degree; document.getElementById('eduInstitute').value = e.institute; document.getElementById('eduDuration').value = e.duration; document.getElementById('eduGrade').value = e.grade||'';
+            document.getElementById('eduFormTitle').innerText = "✏️ Edit Education"; document.getElementById('eduBtn').innerText = "Update"; document.getElementById('eduCancel').style.display = 'block';
+        }
+
+        // ================= SKILLS =================
+        async function loadSkills() {
+            stateData.skills = await apiCall('skills');
+            const div = document.getElementById('skillsList'); div.innerHTML = '';
+            stateData.skills.forEach(s => {
+                div.innerHTML += `<div class="list-item"><div class="list-actions"><button onclick="editSkill('${s._id}')" class="btn-warning">Edit</button><button onclick="deleteItem('skills', '${s._id}')" class="btn-danger">Del</button></div><h4 style="margin:0">${s.category}</h4><div>${s.items.map(t=>`<span class="tech-badge">${t}</span>`).join('')}</div></div>`;
+            });
+        }
+        document.getElementById('skillForm').addEventListener('submit', async (e) => {
+            e.preventDefault(); const id = document.getElementById('skillId').value;
+            const data = { category: document.getElementById('skillCat').value, items: document.getElementById('skillItems').value.split(',').map(t=>t.trim()) };
+            id ? await apiCall(`skills/${id}`, 'PUT', data) : await apiCall('skills', 'POST', data);
+            cancelEdit('skillForm','skillId','skillFormTitle','➕ Add Skill','skillBtn','Save','skillCancel'); loadSkills();
+        });
+        function editSkill(id) {
+            const s = stateData.skills.find(x => x._id === id);
+            document.getElementById('skillId').value = s._id; document.getElementById('skillCat').value = s.category; document.getElementById('skillItems').value = s.items.join(', ');
+            document.getElementById('skillFormTitle').innerText = "✏️ Edit Skill"; document.getElementById('skillBtn').innerText = "Update"; document.getElementById('skillCancel').style.display = 'block';
+        }
+
+        // ================= ACHIEVEMENTS =================
+        async function loadAchievements() {
+            stateData.achievements = await apiCall('achievements');
+            const div = document.getElementById('achievementsList'); div.innerHTML = '';
+            stateData.achievements.forEach(a => {
+                div.innerHTML += `<div class="list-item"><div class="list-actions"><button onclick="editAchievement('${a._id}')" class="btn-warning">Edit</button><button onclick="deleteItem('achievements', '${a._id}')" class="btn-danger">Del</button></div><h4 style="margin:0">${a.title} (${a.year})</h4><p style="margin:0; font-size: 0.9rem;">${a.description}</p></div>`;
+            });
+        }
+        document.getElementById('achForm').addEventListener('submit', async (e) => {
+            e.preventDefault(); const id = document.getElementById('achId').value;
+            const data = { title: document.getElementById('achTitle').value, description: document.getElementById('achDesc').value, year: document.getElementById('achYear').value };
+            id ? await apiCall(`achievements/${id}`, 'PUT', data) : await apiCall('achievements', 'POST', data);
+            cancelEdit('achForm','achId','achFormTitle','➕ Add Achievement','achBtn','Save','achCancel'); loadAchievements();
+        });
+        function editAchievement(id) {
+            const a = stateData.achievements.find(x => x._id === id);
+            document.getElementById('achId').value = a._id; document.getElementById('achTitle').value = a.title; document.getElementById('achDesc').value = a.description; document.getElementById('achYear').value = a.year;
+            document.getElementById('achFormTitle').innerText = "✏️ Edit Achievement"; document.getElementById('achBtn').innerText = "Update"; document.getElementById('achCancel').style.display = 'block';
+        }
+
+        // ================= COURSES =================
+        async function loadCourses() {
+            stateData.courses = await apiCall('courses');
+            const div = document.getElementById('coursesList'); div.innerHTML = '';
+            stateData.courses.forEach(c => {
+                div.innerHTML += `<div class="list-item" style="display:inline-block; margin-right:10px;"><div class="list-actions" style="position:static; display:inline-block; margin-left:10px;"><button onclick="deleteItem('courses', '${c._id}')" class="btn-danger" style="padding:2px 6px;">X</button></div><strong>${c.name}</strong></div>`;
+            });
+        }
+        document.getElementById('courseForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            await apiCall('courses', 'POST', { name: document.getElementById('courseName').value });
+            cancelEdit('courseForm','courseId','courseFormTitle','➕ Add Course','courseBtn','Save','courseCancel'); loadCourses();
+        });
     </script>
 </body>
 </html>

@@ -8,7 +8,8 @@ require("dotenv").config();
 // 2. INITIALIZING APP & MIDDLEWARE
 const app = express();
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ limit: "10mb", extended: true }));
 
 // 3. DATABASE CONNECTION
 mongoose
@@ -81,9 +82,11 @@ app.post("/api/login", (req, res) => {
 
 // --- PUBLIC: READ ALL (GET) ---
 // Example URL: http://localhost:5000/api/education
+// --- PUBLIC: READ ALL (GET) ---
 app.get("/api/:collectionName", attachModel, async (req, res) => {
   try {
-    const data = await req.Model.find(); // Uses whichever model we attached
+    // .sort({ _id: -1 }) tells MongoDB to return newest created items first!
+    const data = await req.Model.find().sort({ _id: -1 });
     res.json(data);
   } catch (error) {
     res.status(500).json({ message: "Error fetching data", error });
