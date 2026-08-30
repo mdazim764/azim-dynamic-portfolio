@@ -57,6 +57,7 @@ const models = {
   achievements: require("./models/Achievement"),
   courses: require("./models/Course"),
   profile: require("./models/Profile"),
+  certifications: require("./models/Certification"),
 };
 
 // This function intercepts the request and figures out WHICH model to use

@@ -22,6 +22,7 @@ const profileSchema = new mongoose.Schema({
   phone: { type: String }, // "+91 8600836379"
   github: { type: String }, // "https://github.com/mdazim764"
   linkedin: { type: String }, // "https://www.linkedin.com/..."
+  resumeUrl: { type: String },
 });
 
 module.exports = mongoose.model("Profile", profileSchema);

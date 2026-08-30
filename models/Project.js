@@ -7,6 +7,7 @@ const projectSchema = new mongoose.Schema({
   description: { type: String, required: true },
   year: { type: String, required: true },
   technologies: { type: [String], required: true }, // Array of strings (like ["React", "Node"])
+  githubUrl: { type: String },
 });
 
 // 2. Exporting the Model so our server.js can use it
