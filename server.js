@@ -128,6 +128,15 @@ app.post("/api/contact", async (req, res) => {
   }
 });
 
+// --- PUBLIC ROUTE: SERVER HEALTH CHECK (For UptimeRobot/Cron Jobs) ---
+app.get("/api/health", (req, res) => {
+  res.status(200).json({
+    status: "Active",
+    message: "Portfolio backend is awake and running smoothly! 🚀",
+    timestamp: new Date().toISOString(),
+  });
+});
+
 // --- PUBLIC: READ ALL (GET) ---
 // Example URL: http://localhost:5000/api/education
 // --- PUBLIC: READ ALL (GET) ---
